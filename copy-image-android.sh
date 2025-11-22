@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEST="$HOME/Pictures/photo-backup-redmi"
+DEST="$HOME/Pictures/photo-backup-oneplus_test"
 LOG_FILE="$DEST/copied-files.log"
 ERR_LOG="$DEST/failed-files.log"
 SKIP_LOG="$DEST/skip-files.log"
@@ -23,7 +23,7 @@ while read -r FILE; do
     [[ -z "$FILE" ]] && continue
     
     # Stop after 100 files for testing
-    # if [[ $TOTAL -gt 100 ]]; then
+    # if [[ $TOTAL -gt 10 ]]; then
     #     echo "🛑 Test limit reached: $TOTAL files processed"
     #     break
     # fi
@@ -150,6 +150,19 @@ while read -r FILE; do
     # -----------------------------------
     if [[ -z "$DATE_FOUND" ]]; then
         if [[ $BASENAME =~ P_([0-9]{4})([0-9]{2})([0-9]{2})_([0-9]{6}) ]]; then
+            YEAR="${BASH_REMATCH[1]}"
+            MONTH="${BASH_REMATCH[2]}"
+            DAY="${BASH_REMATCH[3]}"
+            DATE_FOUND="$YEAR-$MONTH-$DAY"
+        fi
+    fi
+
+    # -----------------------------------
+    # Pattern 10 — IMGYYYYMMDDHHMMSS.jpg
+    # Example: IMG20230502114649.jpg
+    # -----------------------------------
+    if [[ -z "$DATE_FOUND" ]]; then
+        if [[ $BASENAME =~ IMG([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2}) ]]; then
             YEAR="${BASH_REMATCH[1]}"
             MONTH="${BASH_REMATCH[2]}"
             DAY="${BASH_REMATCH[3]}"
